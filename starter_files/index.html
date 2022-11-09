@@ -1,48 +1,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css"/>
-    <script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+    <link rel="stylesheet" href="https://pyscript.net/alpha/pyscript.css" />
+<script defer src="https://pyscript.net/alpha/pyscript.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <title> Playground </title>
     <!-- Import PyScript -->
 
     <!-- Import Python modules -->
     <py-env>
-        - numpy
-        - pandas
-        - scikit-learn
+    - numpy
+    - pandas
+    - seaborn
+    - matplotlib
+    - scikit-learn
+    - paths:
+        - src/helper.py
     </py-env>
 
 </head>
 <body>
-    <py-script src="./src/helper.py">
-        print("Hello world!")
-        import numpy as np
-        a = [1,3,5]
-        print(np.power(a,3))
-        # Run this using "asyncio"
-        async def main():
-        await micropip.install(["matplotlib", "numpy"])
-        await loop.run_until_complete(main())
-        import matplotlib.pyplot as plt
-        import numpy as np
-        x = np.linspace(0, 2 * np.pi, 100)
-        plt.plot(x, np.sin(x))
-        plt
+    <py-script>
         <py-repl>
-import numpy as np
-from matplotlib import pyplot as plt
-  </py-repl>
-  <py-repl>
-t = np.arange(0.0, 2.0, 0.01)
-s = 1 + np.sin(2 * np.pi * t)
-fig, ax = plt.subplots()
-ax.plot(t, s)
-fig
-  </py-repl>
-  <py-repl></py-repl>
-        
-    </py-script>
+            df[0:10]
+        </py-repl>
+        import pandas as pd
+        import seaborn as sns
+        from pyodide.http import open_url
+        import seaborn as sns
+        import matplotlib.pyplot as plt
+        from helper import *
+        url = 'https://raw.githubusercontent.com/ibm-developer-skills-network/pyscript-gp/main/dataset/audi.csv'
+        url_content = open_url(url)
+        df = pd.read_csv(url_content)
+        def plot(x, y, type):
+        fig, ax = plt.subplots()
+        if type=='splot':
+        sns.scatterplot(y=y, x=x, data=df, ax=ax, label=(x,y))
+        elif type=='lplot':
+        sns.lineplot(y=y, x=x, data=df, ax=ax, label=(x,y))  
+    # TODO: Repeat this process to create distribution plot, bar plot and box plot
+    pyscript.write("chart1", fig)
+</py-script>
+   <div>
+    <h3 class="display-7">ML Model to Predict Car Price</h3>
+    <span class="badge badge-pill badge-primary">PyScript</span>
+    <span class="badge badge-pill badge-secondary">Bootstrap</span>
+</div>
+    <h7>Select x and y variables: </h7>
+<div>
+    <div class="form-group row">
+        <label for="inputx" class="col-sm-1 col-form-label"></label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" id="inputx" placeholder="x">
+        </div>
+        <label for="inputy" class="col-sm-1 col-form-label"></label>
+        <div class="col-sm-4">
+          <input type="text" class="form-control" id="inputy" placeholder="y">
+        </div>
+    </div>
+</div>
+    <h7>Select chart type: </h7>
+<div>
+    <div>
+       <select class="form-control" id="select">
+        <option value="splot">Scatterplot</option>
+        <option value="lplot">Lineplot</option>
+        <option value="dist">Distribution</option> 
+        <option value="bplot">Barplot</option> 
+        <option value="boplot">Boxplot</option> 
+       </select>
+    </div>
+</div>
+    <div class="row">
+   <div class="col-sm-6 p-2 shadow ml-4 mr-4 mb-4 bg-white rounded mx-auto d-block">
+      <div id="chart1"></div>
+   </div>
+</div>
+    <h7>Predict car price: </h7>
+<div>
+   <form>
+       <div class="form-group row">
+         <label for="year" class="col-sm-2 col-form-label">Year</label>
+         <div class="col-sm-10">
+           <input type="number" class="form-control" id="year" placeholder=2021 default=2021>
+         </div>
+         <! –– Repeat the process for tax, mpg, and engineSize ––>
+       </div>
+     </form>
+</div>
+<h7>Predicted Price: </h7>
+<p id="predtext"></p>
     <!-- Python Script Here -->
 
 </body>
