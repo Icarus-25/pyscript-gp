@@ -92,7 +92,61 @@
 <h7>Predicted Price: </h7>
 <p id="predtext"></p>
     <!-- Python Script Here -->
+    <py-script>
+        df_p = preprocess(df)
+        X_train, X_test, y_train, y_test = split(df_p)
+        lr_model = lr(X_train, y_train)
+        def predict(year, mileage, tax, mpg, engineSize):
+    out = lr_model.predict(pd.DataFrame([[year, mileage, tax, mpg, engineSize]], columns=X_train.columns))[0]
+    # TODO: Use pyscript.write() to send the output `predtext` component. Don't forget to format the output as currency.
+    from js import document
+from pyodide import create_proxy
+        def textChange(event):
+   type = document.getElementById("select").value
+   # TODO: repeat the above process to get the x and y values
+   choicex =  __
+   choicey = __
 
+   plot(choicex, choicey, type)
+
+def mlChange(event):
+   year = document.getElementById("year").value
+   mileage = document.getElementById("mileage").value
+   # TODO: repeat the above process to get the tax, mpg and engine size values
+   tax = __
+   mpg = __
+   engineSize = __
+
+   predict(year, mileage, tax, mpg, engineSize)
+        def setup():
+   # Create a JsProxy for the callback function
+   change_proxy = create_proxy(textChange)
+   ex = document.getElementById("inputx")
+   ey = document.getElementById("inputy")
+   t = document.getElementById("select")
+
+   t.addEventListener("change", change_proxy)
+   ex.addEventListener("change", change_proxy)
+   ey.addEventListener("change", change_proxy)
+
+def setup2():
+   change_proxy = create_proxy(mlChange)
+   eyear = document.getElementById("year")
+   emileage = document.getElementById("mileage")
+   etax = document.getElementById("tax")
+   empg = document.getElementById("mpg")
+   eengineSize = document.getElementById("engineSize")
+
+   eyear.addEventListener("change", change_proxy)
+   emileage.addEventListener("change", change_proxy)
+   etax.addEventListener("change", change_proxy)
+   empg.addEventListener("change", change_proxy)
+   eengineSize.addEventListener("change", change_proxy)
+        setup()
+plot('mileage','price', type='splot')
+setup2()
+predict(2021, 1529.0, 150.0,52.3,1.6)
+     </py-script>
 </body>
 
 </html>
